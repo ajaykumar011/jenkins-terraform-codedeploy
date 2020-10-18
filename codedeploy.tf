@@ -11,8 +11,8 @@ resource "aws_codedeploy_deployment_group" "main" {
   deployment_config_name = "CodeDeployDefault.OneAtATime" # AWS defined deployment config
   autoscaling_groups     = aws_autoscaling_group.app-launchtp-asg.name
   deployment_style {
-    deployment_option = WITHOUT_TRAFFIC_CONTROL
-    deployment_type = IN_PLACE
+    deployment_option = "WITHOUT_TRAFFIC_CONTROL"
+    deployment_type = "IN_PLACE"
   }
 
   load_balancer_info{
