@@ -1,0 +1,60 @@
+{
+  "description": "Amazon Linux 2 {{ user `image_type`}} AMI",
+  "variables" : {
+    "device_name": "/dev/xvda",
+    "disk_size": "8",
+    "volume_type": "gp2",
+    "region": "us-east-1",
+    "instance_profile": "packer_ami_profile",
+    "image_type": "test"
+  },
+
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "ami_block_device_mappings": [
+        {
+          "delete_on_termination": true,
+          "device_name": "{{user `device_name`}}",
+          "volume_size": "{{user `disk_size`}}",
+          "volume_type": "{{user `volume_type`}}"
+        }
+      ],
+      "launch_block_device_mappings": [
+        {
+          "delete_on_termination": true,
+          "device_name": "{{user `device_name`}}",
+          "volume_size": "{{user `disk_size`}}",
+          "volume_type": "{{user `volume_type`}}"
+        }
+      ],
+      "ami_regions": "{{ user `region` }}",
+      "iam_instance_profile": "{{user `instance_profile`}}",
+      "associate_public_ip_address": false,
+      "region": "{{ user `region`}}",
+      "source_ami_filter": {
+        "filters": {
+        "virtualization-type": "hvm",
+        "name": "amzn2-ami-hvm-2.0.*",
+        "root-device-type": "ebs"
+        },
+        "owners": ["self"],
+        "most_recent": true
+      },
+      "instance_type": "t2.micro",
+      "ssh_username": "ec2-user",
+      "ami_name": "amzn-linux-2-base"
+      }
+   ],
+
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "{{user `ansible_playbook_file`}}",
+      "user": "ec2-user",
+      "extra_arguments": [
+        "-v"
+      ]
+    }
+  ]
+}

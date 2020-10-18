@@ -1,0 +1,32 @@
+{
+    "description": "Amazon Linux 2 {{ user `image_type`}} AMI",
+    "variables": {
+      "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+      "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+      "region": "ap-south-1",
+      "ssh_username": "ec2-user",
+      "base_ami": "ami-00e782930f1c3dbc7",
+      "instance_type": "t2.micro",
+      "image_type": "test"
+  },
+  "builders": [
+      {
+        "type": "amazon-ebs",
+        "access_key": "{{user `aws_access_key`}}",
+        "secret_key": "{{user `aws_secret_key` }}",
+        "region": "{{user `region` }}",
+        "source_ami": "{{user `base_ami`}}",
+        "instance_type": "{{user `instance_type` }}",
+        "ssh_username": "{{user `ssh_username`}}",
+        "ami_name": "amzn-linux-2-base",
+        "associate_public_ip_address": true
+      }
+    ],
+    "provisioners": [
+      {
+        "type": "ansible-local",
+        "playbook_file": "ansible/site.yml"
+      }
+    ]
+  }
+  
