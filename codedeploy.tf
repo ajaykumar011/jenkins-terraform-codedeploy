@@ -43,7 +43,7 @@ resource "aws_codedeploy_deployment_group" "main" {
 
     trigger_configuration {
     trigger_events     = ["DeploymentFailure"]
-    trigger_name       = "example-trigger"
+    trigger_name       = "app-trigger"
     trigger_target_arn = "arn:aws:sns:us-east-1:143787628822:EmailNotify" 
   }
 
