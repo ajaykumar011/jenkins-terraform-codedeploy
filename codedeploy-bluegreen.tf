@@ -12,14 +12,14 @@ resource "aws_codedeploy_deployment_group" "main" {
   //deployment_config_name = "CodeDeployDefault.OneAtATime" # AWS defined deployment config
  // autoscaling_groups     = [aws_autoscaling_group.app-launchtp-asg.name]
 
-  deployment_style {
+deployment_style {
     deployment_option = "WITH_TRAFFIC_CONTROL"
     deployment_type = "BLUE_GREEN"
   }
 
   load_balancer_info {
     elb_info {
-      name = aws_lb_target_group.app-alb-tg1.name-------------
+      name = aws_lb.app-elb.name
     }
   }
 
@@ -37,7 +37,7 @@ resource "aws_codedeploy_deployment_group" "main" {
       action = "KEEP_ALIVE"
     }
   }
-  
+
   ec2_tag_set {
     ec2_tag_filter {
       key   = "OS"

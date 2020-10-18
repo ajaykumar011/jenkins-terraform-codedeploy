@@ -1,7 +1,8 @@
 # Disable alb.tf to use this , you should also enable codedeploy-bluegreen.tf
 resource "aws_lb" "app-elb" {
   name               = "app-elb"
-  //internal           = false
+  name_prefix        = "classic"
+  internal           = false
   subnets            = [aws_subnet.main-public-1.id, aws_subnet.main-public-2.id]
   security_groups    = [aws_security_group.elb-securitygroup.id]
   enable_deletion_protection = false
@@ -11,10 +12,63 @@ resource "aws_lb" "app-elb" {
   //   prefix  = "app-lb"
   //   enabled = true
   // }
+
+listener {
+    instance_port     = 80
+    instance_protocol = "http"
+    lb_port           = 80
+    lb_protocol       = "http"
+  }
+
+  // listener {
+  //   instance_port      = 80
+  //   instance_protocol  = "http"
+  //   lb_port            = 443
+  //   lb_protocol        = "https"
+  //   ssl_certificate_id = "arn:aws:iam::123456789012:server-certificate/certName"
+  // }
+
+health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 3
+    target              = "HTTP:80/"
+    interval            = 30
+  }
+
+  //instances                   = [aws_instance.foo.id]
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
+
   tags = {
     Environment = "production"
   }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // resource "aws_lb_target_group_attachment" "app-alb-tg-attachment" {
 //   target_group_arn = aws_lb_target_group.app-alb-tg1.arn
