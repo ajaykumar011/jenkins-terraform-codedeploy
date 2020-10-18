@@ -9,13 +9,13 @@ resource "aws_codedeploy_deployment_group" "main" {
   deployment_group_name = "Nginx_Web_DepGroup"
   service_role_arn      = aws_iam_role.codedeploy_service.arn
   deployment_config_name = "CodeDeployDefault.OneAtATime" # AWS defined deployment config
-  autoscaling_groups     = aws_autoscaling_group.app-launchtp-asg.name
+  autoscaling_groups     = [aws_autoscaling_group.app-launchtp-asg.name]
   deployment_style {
-    deployment_option = "WITHOUT_TRAFFIC_CONTROL"
+    deployment_option = "WITH_TRAFFIC_CONTROL"
     deployment_type = "IN_PLACE"
   }
 
-  load_balancer_info{
+  load_balancer_info {
     target_group_info  {
       name = aws_lb_target_group.app-alb-tg1.name
     }
