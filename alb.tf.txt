@@ -1,3 +1,4 @@
+# Disable alb.tf to use thie class elb and enable codedeply-inplace.tf
 resource "aws_lb" "app-alb" {
   name               = "app-alb"
   internal           = false
