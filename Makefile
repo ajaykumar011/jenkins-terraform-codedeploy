@@ -89,4 +89,5 @@ __check_defined = \
       $(error Undefined $1$(if $2, ($2))))
 
 
-#
+#https://www.youtube.com/watch?v=qVcdO3OeTZo
+#https://github.com/ajaykumar011/hashitalks-africa-demo
