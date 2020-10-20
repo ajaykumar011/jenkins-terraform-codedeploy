@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    bucket = "cloudzone100"
-    key    = "terraform.tfstate"
+    bucket               = "cloudzone100"
+    key                  = "terraform.tfstate"
     workspace_key_prefix = "workspace"
-    region = "us-east-1"
+    region               = "us-east-1"
   }
 }
 

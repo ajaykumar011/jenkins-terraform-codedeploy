@@ -72,17 +72,18 @@ pipeline {
                 script {
                     currentBuild.displayName = params.version //not required
                 }
-                //dir("${env.WORKSPACE}/Terraform-with-Jenkins"){  //directory steps paramters to change the directory(if you have terraform in a dir in git)
+                  dir("${params.TF_WORKSPACE}"){  //directory steps paramters to change the directory(if you have terraform in a dir in git)
                   //https://www.jenkins.io/doc/pipeline/steps/workflow-basic-steps/#dir-change-current-directory
                   //In normal git configuration we do not require to change the directory
                   sh 'pwd'
                   sh 'terraform --version'
                   sh 'terraform init -input=false'
+                  //terraform init -input=false -force-copy -lock=true -upgrade -verify-plugins=true -backend=true -backend-config="profile=$AWS_PROFILE" -backend-config="region=$REGION" -backend-config="bucket=$S3_BUCKET" -backend-config="key=terraform-state/$ENV/terraform.tfstate" -backend-config="acl=private" 
                   //sh 'terraform workspace select ${TF_WORKSPACE}'
                   sh 'terraform workspace new $TF_WORKSPACE || true'
-                  sh "terraform plan -input=false -out tfplan --var-file=${params.TF_WORKSPACE}.tfvars"
-                  sh 'terraform show -no-color tfplan > tfplan.txt'
-                //}
+                  sh "terraform plan -input=false -out ${params.TF_WORKSPACE}-tfplan --var-file=${params.TF_WORKSPACE}.tfvars"
+                  sh 'terraform show -no-color ${params.TF_WORKSPACE}-tfplan > tfplan.txt'
+                }
             }
         }
 
@@ -104,8 +105,10 @@ pipeline {
 
         stage('Apply') {
             steps {
-                sh "terraform apply -input=false tfplan"
-                }
+                dir("${params.TF_WORKSPACE}"){
+                sh "terraform apply -input=false ${params.TF_WORKSPACE}-tfplan"
+                }    
+            }
         }
 
   
@@ -120,8 +123,11 @@ pipeline {
                 }
              }
             steps {
+                
                 echo "Hello, ${PERSON}, nice to meet you."
+                dir("${params.TF_WORKSPACE}"){
                 sh 'terraform destroy -auto-approve'
+                }
             }
             when { 
                 environment name: 'INFRA-DEL', value: 'Yes'

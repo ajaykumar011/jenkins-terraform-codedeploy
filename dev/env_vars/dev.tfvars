@@ -1,1 +1,2 @@
-aws_region = "us-east-1"
+AWS_REGION = "us-east-1"
+project_name = "Cloudzone"

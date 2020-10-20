@@ -33,10 +33,10 @@ resource "aws_launch_template" "app-launchtp" {
 
   tag_specifications {
     resource_type = "instance"
-
-    tags = {
-      Name = local.instance_name
-    }
+    tags = local.common_tags
+    // tags = {
+    //   Name = local.project_name
+    // }
   }
   //user_data = filebase64("${path.module}/userdata.sh")
   user_data = base64encode(<<EOF
@@ -63,7 +63,7 @@ resource "aws_autoscaling_group" "app-launchtp-asg" {
 
   tag {
     key = "Name"
-    value = local.instance_name
+    value = local.project_name
     propagate_at_launch = true
   }
 }

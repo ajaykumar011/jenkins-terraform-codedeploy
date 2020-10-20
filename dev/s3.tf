@@ -5,9 +5,14 @@ resource "aws_s3_bucket" "elblogs-store" {
   versioning {
     enabled = true
   }
-  tags = {
-    Name = local.environment_name
-  }
+  #combined tags
+  tags = "${merge(
+    local.common_tags,
+    map(
+      "Work", "awesome-storage",
+      "Role", "storage"
+    )
+  )}"
 }
 
 resource "random_string" "random" {

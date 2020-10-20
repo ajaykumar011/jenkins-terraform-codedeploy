@@ -1,6 +1,7 @@
 # Disable alb.tf to use thie class elb and enable codedeply-inplace.tf
 resource "aws_lb" "app-alb" {
   name               = "app-alb"
+  #name_prefix        = local.name_prefix
   internal           = false
   load_balancer_type = "application"
 
@@ -13,9 +14,12 @@ resource "aws_lb" "app-alb" {
   //   prefix  = "app-lb"
   //   enabled = true
   // }
-  tags = {
-    Environment = local.environment_name
-  }
+
+  tags = local.common_tags
+  // Below is short form of tags
+  // tags = {
+  //   Environment = local.environment_name
+  // }
 }
 
 // resource "aws_lb_target_group_attachment" "app-alb-tg-attachment" {

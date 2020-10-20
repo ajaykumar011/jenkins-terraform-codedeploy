@@ -11,3 +11,7 @@ terraform init
 terraform workspace new dev
 
 #
+
+terraform plan -var-file="env_vars/dev.tfvars" -out dev.plan
+terraform apply dev.plan
+
