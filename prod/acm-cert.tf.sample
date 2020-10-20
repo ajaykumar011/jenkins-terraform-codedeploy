@@ -1,0 +1,19 @@
+##################
+# ACM certificate SAMPLE
+##################
+resource "aws_route53_zone" "this" {
+  name          = "elbexample.com"
+  force_destroy = true
+}
+
+module "acm" {
+  source  = "terraform-aws-modules/acm/aws"
+  version = "~> 2.0"
+
+  zone_id = aws_route53_zone.this.zone_id
+
+  domain_name               = "elbexample.com"
+  subject_alternative_names = ["*.elbexample.com"]
+
+  wait_for_validation = false
+}

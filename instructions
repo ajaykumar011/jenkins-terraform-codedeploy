@@ -1,0 +1,13 @@
+for direct testing without jenkins
+-----------------------------------------------------
+
+#check the backend.tf file for bucket (Bucket must be exist separately for both environments)
+cd prod
+terraform init
+terraform workspace new prod
+cd ..
+cd dev
+terraform init
+terraform workspace new dev
+
+#

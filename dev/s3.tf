@@ -4,9 +4,9 @@ resource "aws_s3_bucket" "elblogs-store" {
   acl    = "private"
   versioning {
     enabled = true
-    }
+  }
   tags = {
-    Name = "elblogs store"
+    Name = local.environment_name
   }
 }
 

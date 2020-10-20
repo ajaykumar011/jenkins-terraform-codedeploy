@@ -1,0 +1,55 @@
+{
+  "description": "Ubuntu{{ user `image_type`}} AMI",
+  "variables": {
+    "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+    "region": "us-east-1",
+    "ssh_username": "ubuntu",
+    "base_ami": "ami-013da1cc4ae87618c",
+    "instance_type": "t2.micro",
+    "image_type": "test",
+    "build_name": "{{env `BUILD_NAME`}}"    
+},
+"builders": [
+    {
+      "type": "amazon-ebs",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key` }}",
+      "region": "{{user `region` }}",
+      "source_ami": "{{user `base_ami`}}",
+      "instance_type": "{{user `instance_type` }}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ami_name": "ubuntu-{{user `build_name`}}-{{ isotime | clean_ami_name }}",
+      "associate_public_ip_address": true,
+      "tags": {
+        "Name": "AWS LAMP Packer",
+        "CreationDate": "{{timestamp}}",
+        "Builder": "Packer",
+        "Provisioner": "Ansible"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "scripts",
+      "destination": "/tmp/scripts"
+    },
+    {
+      "execute_command": "echo 'ubuntu' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "type": "shell",
+      "script": "scripts/server_ready.sh"
+    },
+    {
+      "type": "file",
+      "source": "../app",
+      "destination": "/tmp/app"
+    },
+    {
+      "type": "shell",
+      "scripts": [  "scripts/packer-deploy.sh"   ],
+      "execute_command": "{{ .Vars }} sudo -E sh '{{ .Path }}'",
+      "pause_before": "10s"
+    }
+  ]
+}

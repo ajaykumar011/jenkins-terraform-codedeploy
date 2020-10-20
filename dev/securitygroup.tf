@@ -24,7 +24,7 @@ resource "aws_security_group" "myinstance" {
   }
 
   tags = {
-    Name = "myinstance"
+    Name = local.instance_name
   }
 }
 

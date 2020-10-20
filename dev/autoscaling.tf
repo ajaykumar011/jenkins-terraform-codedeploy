@@ -20,7 +20,7 @@ resource "aws_launch_template" "app-launchtp" {
   image_id = var.APP_AMI
   //instance_initiated_shutdown_behavior = "terminate"
   instance_type = "t2.micro"
-  key_name = aws_key_pair.mykey.key_name
+  key_name      = aws_key_pair.mykey.key_name
 
   // monitoring {
   //   enabled = true
@@ -35,7 +35,7 @@ resource "aws_launch_template" "app-launchtp" {
     resource_type = "instance"
 
     tags = {
-      Name = "app-instance"
+      Name = local.instance_name
     }
   }
   //user_data = filebase64("${path.module}/userdata.sh")
@@ -47,23 +47,23 @@ resource "aws_launch_template" "app-launchtp" {
   )
 }
 resource "aws_autoscaling_group" "app-launchtp-asg" {
-  name                      = "app-launchtp-asg"
-  vpc_zone_identifier       = [aws_subnet.main-public-1.id, aws_subnet.main-public-2.id]
+  name = "app-launchtp-asg"
+  vpc_zone_identifier = [aws_subnet.main-public-1.id, aws_subnet.main-public-2.id]
   //desired_capacity          = 1
-  min_size                  = 1
-  max_size                  = 1
+  min_size = 1
+  max_size = 1
   //health_check_grace_period = 300
   //health_check_type         = "EC2"  # this is important to check 
-  target_group_arns         = [aws_lb_target_group.app-alb-tg1.arn]
-  force_delete              = true
+  target_group_arns = [aws_lb_target_group.app-alb-tg1.arn]
+  force_delete = true
   launch_template {
-    id      = aws_launch_template.app-launchtp.id
+    id = aws_launch_template.app-launchtp.id
     version = "$Latest"
   }
 
   tag {
-    key                 = "Name"
-    value               = "app-instance"
+    key = "Name"
+    value = local.instance_name
     propagate_at_launch = true
   }
 }

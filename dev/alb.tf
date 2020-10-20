@@ -3,9 +3,9 @@ resource "aws_lb" "app-alb" {
   name               = "app-alb"
   internal           = false
   load_balancer_type = "application"
-  
-  subnets            = [aws_subnet.main-public-1.id, aws_subnet.main-public-2.id]
-  security_groups    = [aws_security_group.elb-securitygroup.id]
+
+  subnets                    = [aws_subnet.main-public-1.id, aws_subnet.main-public-2.id]
+  security_groups            = [aws_security_group.elb-securitygroup.id]
   enable_deletion_protection = false
 
   // access_logs {
@@ -14,7 +14,7 @@ resource "aws_lb" "app-alb" {
   //   enabled = true
   // }
   tags = {
-    Environment = "production"
+    Environment = local.environment_name
   }
 }
 
