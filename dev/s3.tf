@@ -6,13 +6,13 @@ resource "aws_s3_bucket" "elblogs-store" {
     enabled = true
   }
   #combined tags
-  tags = "${merge(
+  tags = merge(
     local.common_tags,
     map(
       "Work", "awesome-storage",
       "Role", "storage"
     )
-  )}"
+  )
 }
 
 resource "random_string" "random" {
