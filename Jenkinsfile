@@ -18,7 +18,7 @@ pipeline {
         //string(name: 'TF_WORKSPACE', defaultValue: 'dev', description: 'Workspace (dev/prod) file to use for deployment')
         choice(name: 'TF_WORKSPACE', choices: ['dev', 'prod'], description: 'Pick the environment to use')
         string(name: 'TF_REGION', defaultValue: 'us-east-1', description: 'Select your region--not yet implemented')
-        string(name: 'TF_AMI', defaultValue: 'ami-07da0cabaf2e3aef6', description: 'Select your custom AMI-- not yet implemented')
+        string(name: 'TF_AMI', defaultValue: 'ami-0817d428a6fb68645', description: 'Select your custom AMI-- not yet implemented')
         choice(name: 'AWS_PROFILE', choices: ['default', 'ec2-developer', 'ec2-developer'], description: 'Pick AWS profile')
         //string(name: 'version', defaultValue: '0.13.3', description: 'Version variable to pass to Terraform')
         booleanParam(name: 'autoApprove1', defaultValue: false, description: 'Automatically provision?')
