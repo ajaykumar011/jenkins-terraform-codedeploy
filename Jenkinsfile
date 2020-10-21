@@ -146,8 +146,8 @@ pipeline {
             when { 
                 environment name: 'APP-DEPLOYMENT', value: 'Yes'
             }
+            }
         }
-
         stage('Infra-Destroy') {
             input {
                 message "Should we destroy the infrastructre ?"
@@ -169,10 +169,7 @@ pipeline {
                 environment name: 'INFRA-DEL', value: 'Yes'
             }
         }
-
-
-
-    }
+    }  //stage closed
 
     post {
             always {
@@ -204,5 +201,5 @@ pipeline {
             changed {
                 echo 'Things were different before...'
                 }   
-        }
-}
+        } //post closed
+} //pipeline closed
