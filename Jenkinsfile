@@ -87,7 +87,7 @@ pipeline {
                   sh "terraform workspace new ${params.TF_WORKSPACE} || true"
                   //sh "terraform workspace select ${params.TF_WORKSPACE}"
                   sh "terraform plan -input=false -out tfplan --var-file=./env_vars/${params.TF_WORKSPACE}.tfvars"
-                  sh 'terraform show -no-color tfplan > tfplan.txt'
+                  sh 'terraform show -no-color tfplan > ../tfplan.txt'
                 }
             }
         }
@@ -101,9 +101,9 @@ pipeline {
 
             steps {
                 script {
-                    dir("${params.TF_WORKSPACE}"){
+                    //dir("${params.TF_WORKSPACE}"){
                     def plan = readFile 'tfplan.txt'
-                    }
+                    //}
                     input message: "Do you want to apply the plan?",
                         parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
                 }
