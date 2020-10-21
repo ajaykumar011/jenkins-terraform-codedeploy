@@ -127,11 +127,11 @@ pipeline {
                 }
             steps {
                 script {
-                echo "HEY: We are going to deploy your app."
-                sh 'chmod +x app-deploy.sh'
-                sh './app-deploy.sh'
-               
-              // }
+                    dir("${params.TF_WORKSPACE}"){
+                        echo "HEY: We are going to deploy your app."
+                        sh 'chmod +x app-deploy.sh'
+                        sh './app-deploy.sh'
+                        }
               }
             }
         }
