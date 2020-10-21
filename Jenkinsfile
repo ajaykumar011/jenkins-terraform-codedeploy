@@ -14,7 +14,9 @@ pipeline {
         GIT_BRANCH = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length())
         }
  parameters {
-        string(name: 'TF_WORKSPACE', defaultValue: 'dev', description: 'Workspace (dev/prod) file to use for deployment')
+        
+        //string(name: 'TF_WORKSPACE', defaultValue: 'dev', description: 'Workspace (dev/prod) file to use for deployment')
+        choice(name: 'TF_WORKSPACE', choices: ['dev', 'prod'], description: 'Pick the environment to use')
         string(name: 'TF_REGION', defaultValue: 'us-east-1', description: 'Select your region--not yet implemented')
         string(name: 'TF_AMI', defaultValue: 'ami-07da0cabaf2e3aef6', description: 'Select your custom AMI-- not yet implemented')
         choice(name: 'AWS_PROFILE', choices: ['default', 'ec2-developer', 'ec2-developer'], description: 'Pick AWS profile')
@@ -103,9 +105,9 @@ pipeline {
                 script {
                     dir("${params.TF_WORKSPACE}"){
                     def plan = readFile 'tfplan.txt'
-                    }
-                    input message: "Do you want to apply the plan?",
+                        input message: "Do you want to apply the plan?",
                         parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
+                    }
                 }
             }
         }
