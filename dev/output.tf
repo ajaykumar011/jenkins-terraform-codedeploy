@@ -6,3 +6,7 @@ output "ALB" {
 output "bucket_name" {
   value = aws_s3_bucket.b.bucket_domain_name
 }
+
+output "application_name" {
+  value = aws_codedeploy_app.main.name
+}

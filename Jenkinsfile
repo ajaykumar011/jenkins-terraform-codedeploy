@@ -139,7 +139,7 @@ pipeline {
                }
             }
             when { 
-                environment name: 'INFRA-DEL', value: 'Yes'
+                environment name: 'APP-DEPLOYMENT', value: 'Yes'
             }
 
         }
