@@ -36,7 +36,7 @@ pipeline {
                     echo 'Pulling... ' + env.GIT_BRANCH
                     sh 'printenv'
                    //sh "ls -la ${pwd()}"   # this is working but not needed
-                   sh "tree ${env.WORKSPACE}"  # this is working but not needed
+                   sh "tree ${env.WORKSPACE}" 
                 }
             }
         }
