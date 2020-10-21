@@ -35,8 +35,8 @@ pipeline {
                     //git branch: 'main', credentialsId: 'github-cred', url: 'https://github.com/ajaykumar011/jenkins-packer-with-ansible2/'
                     echo 'Pulling... ' + env.GIT_BRANCH
                     sh 'printenv'
-                   //sh "ls -la ${pwd()}"  
-                    sh "tree ${env.WORKSPACE}"
+                   //sh "ls -la ${pwd()}"   # this is working but not needed
+                   //sh "tree ${env.WORKSPACE}"  # this is working but not needed
                 }
             }
         }
@@ -127,7 +127,7 @@ pipeline {
                 }
             steps {
                 script {
-                echo "Hello, ${PERSON}, We are going to deploy your app."
+                echo "HEY: We are going to deploy your app."
                 //def output = sh returnStdout: true, script: 'ls -l'
                 //FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
                 def APPLICATION_NAME = sh returnStdout: true, script: "terraform output | grep 'application_name' | cut -d '=' -f2 | xargs".trim()
