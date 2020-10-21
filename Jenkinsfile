@@ -83,7 +83,7 @@ pipeline {
                   //In normal git configuration we do not require to change the directory
                   sh 'pwd'
                   sh 'terraform --version'
-                  sh 'terraform init -input=false'
+                  //sh 'terraform init -input=false'
                   //terraform init -input=false -force-copy -lock=true -upgrade -verify-plugins=true -backend=true -backend-config="profile=$AWS_PROFILE" -backend-config="region=$REGION" -backend-config="bucket=$S3_BUCKET" -backend-config="key=terraform-state/$ENV/terraform.tfstate" -backend-config="acl=private" 
                   //sh "terraform workspace select ${TF_WORKSPACE}"  # not required
                   sh "terraform workspace new ${params.TF_WORKSPACE} || true"
