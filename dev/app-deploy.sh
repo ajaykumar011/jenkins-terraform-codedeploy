@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash-xe
 
 echo "I am current inside $PWD"
 APPLICATION_NAME=`terraform output | grep 'application_name' | cut -d '=' -f2 | xargs`
@@ -8,9 +8,7 @@ S3_BUCKET=`terraform output | grep 'bucket_name' | cut -d '=' -f2 | cut -d '.' -
 # --application-name ${APPLICATION_NAME} \
 # --s3-location s3://${S3_BUCKET}/${JOB_BASE_NAME}/Build-${BUILD_NUMBER}.zip --source ../../app/.
 
-DEPLOYMENT_COMMAND=`aws \
---region ${AWS_REGION} \
---profile ${AWS_PROFILE} deploy push \
+DEPLOYMENT_COMMAND=`aws --region ${AWS_REGION} --profile ${AWS_PROFILE} deploy push \
 --application-name ${APPLICATION_NAME} \
 --s3-location s3://${S3_BUCKET}/${JOB_BASE_NAME}/Build-${BUILD_NUMBER}.zip \
 --source ../../app/.`
@@ -20,7 +18,7 @@ DEPLOYMENT_CONFIG_NAME=`terraform show | grep deployment_config_na me | cut -d '
 DEPLPOYMENT_ETAG=`echo $DEPLOYMENT_COMMAND | awk -F '--' '{print $3}' | cut -d ',' -f4 | cut -d '=' -f2|xargs`
 
 #Command to deploy
-aws deploy create-deployment \
+aws --region ${AWS_REGION} --profile ${AWS_PROFILE} deploy create-deployment \
 --application-name ${APPLICATION_NAME} \
 --s3-location bucket=${S3_BUCKET},key=${JOB_BASE_NAME}/Build-${BUILD_NUMBER}.zip,bundleType=zip,eTag=${DEPLPOYMENT_ETAG} \
 --deployment-group-name ${DEPLOYMENT_GROUP_NAME} \

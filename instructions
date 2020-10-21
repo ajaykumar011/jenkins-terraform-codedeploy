@@ -15,3 +15,9 @@ terraform workspace new dev
 terraform plan -var-file="env_vars/dev.tfvars" -out dev.plan
 terraform apply dev.plan
 
+
+#instructions
+#pls note this example is not working .. Hence you need to make changes in deployment section and buidspec.yml.
+#be ready with Golden AMI (not general AMI and install)
+#adjust the userdata if the REady to use AMI is there
+#
