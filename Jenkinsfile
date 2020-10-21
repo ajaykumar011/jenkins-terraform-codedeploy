@@ -123,10 +123,8 @@ pipeline {
   
         stage('App Deployment') {
             when {
-                not {
-                    equals expected: true, actual: params.autoApprove2
+                equals expected: true, actual: params.autoApprove2
                 }
-            }
             steps {
                 script {
                 echo "Hello, ${PERSON}, We are going to deploy your app."
