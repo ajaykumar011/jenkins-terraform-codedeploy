@@ -124,7 +124,7 @@ pipeline {
         stage('App Deployment') {
             when {
                 not {
-                    equals expected: true, actual: params.autoApprove1
+                    equals expected: true, actual: params.autoApprove2
                 }
             }
             steps {
