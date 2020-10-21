@@ -131,6 +131,7 @@ pipeline {
                 script {
                 echo "Hello, ${PERSON}, We are going to deploy your app."
                 //def output = sh returnStdout: true, script: 'ls -l'
+                //FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
                 def application_name = sh returnStdout: true, script: "terraform output | grep 'application_name' | cut -d '=' -f2 | xargs".trim()
                 echo "${application_name}"
                 //def bucket_name = sh (returnStdout: true, script: "(terraform output | grep 'bucket_name' | cut -d '=' -f2 | cut -d '.' -f1  | xargs).trim())"
