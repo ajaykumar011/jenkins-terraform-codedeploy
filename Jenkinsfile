@@ -132,10 +132,14 @@ pipeline {
                 }
              }
             steps {
-                
+                script {
                 echo "Hello, ${PERSON}, We are going to deploy your app."
+                def output = sh returnStdout: true, script: 'ls -l'
+                def application_name = sh returnStdout: true, script: "terraform output | grep 'application_name' | cut -d '=' -f2 | xargs"
+                def bucket_name = sh returnStdout: true, script: "terraform output | grep 'bucket_name' | cut -d '=' -f2 | cut -d '.' -f1  | xargs"
+                def s3_zip_name = sh returnStdout: true, script: "terraform output | grep 'application_name' | cut -d '=' -f2 | xargs`_$BUILD_NUMBER.zip"
                 dir("app"){
-                sh "aws --region ${params.AWS_REGION} --profile ${params.AWS_PROFILE} deploy push --application-name Web_App  --s3-location s3://`(terraform output | grep 'bucket' | cut -d '=' -f2 | cut -d '.' -f1  | xargs)`/Web_App.zip"
+                sh "aws --region ${params.AWS_REGION} --profile ${params.AWS_PROFILE} deploy push --application-name ${application_name} --s3-location s3://${bucket_name}/${s3_zip_name}.zip"
                }
             }
             when { 
