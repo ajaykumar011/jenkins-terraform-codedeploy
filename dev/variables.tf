@@ -39,7 +39,7 @@ variable "DUMMY_SSH_PUB_KEY" {
 
 #custome variables
 variable "project_name" {
-  default = "Cloud"
+  default = "Cloudzone"
 }
 
 variable "name_prefix" {

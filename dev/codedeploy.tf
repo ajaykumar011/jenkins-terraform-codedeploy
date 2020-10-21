@@ -1,13 +1,13 @@
 #Disable codedeploy-bluegreen.tf and enable elb-classitc.tf to use this.
 # create a CodeDeploy application
 resource "aws_codedeploy_app" "main" {
-  name = "Nginx_Web_App"
+  name = "Web_App"
 }
 
 # create a deployment group
 resource "aws_codedeploy_deployment_group" "main" {
   app_name               = aws_codedeploy_app.main.name
-  deployment_group_name  = "Nginx_Web_DepGroup"
+  deployment_group_name  = "Web_DepGroup"
   service_role_arn       = aws_iam_role.codedeploy_service.arn
   deployment_config_name = "CodeDeployDefault.OneAtATime" # AWS defined deployment config
   autoscaling_groups     = [aws_autoscaling_group.app-launchtp-asg.name]

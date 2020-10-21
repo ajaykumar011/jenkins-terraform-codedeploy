@@ -15,9 +15,13 @@ pipeline {
         }
  parameters {
         string(name: 'TF_WORKSPACE', defaultValue: 'dev', description: 'Workspace (dev/prod) file to use for deployment')
+        string(name: 'TF_REGION', defaultValue: 'us-east-1', description: 'Select your region--not yet implemented')
+        string(name: 'TF_AMI', defaultValue: 'ami-07da0cabaf2e3aef6', description: 'Select your custom AMI-- not yet implemented')
+        choice(name: 'AWS_PROFILE', choices: ['default', 'ec2-developer', 'ec2-developer'], description: 'Pick AWS profile')
         //string(name: 'version', defaultValue: '0.13.3', description: 'Version variable to pass to Terraform')
-        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
-    }
+        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically provision?')
+        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically deploy application?')
+        }
 
      
   stages {
@@ -112,6 +116,32 @@ pipeline {
         }
 
   
+        stage('App Deployment') {
+            input {
+                message "Should you want to Deploy Application ?"
+                ok "Yes, we should."
+                submitter "Ajay, Kumar"
+                parameters {
+                    string(name: 'PERSON', defaultValue: 'Ajay Kumar', description: 'Who should I say hello to?')
+                    choice(name: 'APP-DEPLOYMENT', choices: ['Yes', 'No', 'nochange'], description: 'Pick yes to deploy app')
+                }
+             }
+            steps {
+                
+                echo "Hello, ${PERSON}, We are going to deploy your app."
+                dir("app"){
+                sh "aws --region ${params.AWS_REGION} --profile ${params.AWS_PROFILE} deploy push --application-name Web_App  --s3-location s3://`(terraform output | grep 'bucket' | cut -d '=' -f2 | cut -d '.' -f1  | xargs)`/Web_App.zip"
+               }
+            }
+            when { 
+                environment name: 'INFRA-DEL', value: 'Yes'
+            }
+
+        }
+
+
+
+
         stage('Infra-Destroy') {
             input {
                 message "Should we destroy the infrastructre ?"
@@ -132,8 +162,9 @@ pipeline {
             when { 
                 environment name: 'INFRA-DEL', value: 'Yes'
             }
-
         }
+
+
 
     }
 

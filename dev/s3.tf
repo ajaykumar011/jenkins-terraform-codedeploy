@@ -21,8 +21,6 @@ resource "random_string" "random" {
   upper   = false
 }
 
-
-
 # create an S3 bucket for codedeploy store
 resource "aws_s3_bucket" "b" {
   bucket = "codedeploydemo-${random_integer.suffix.result}"
