@@ -19,8 +19,8 @@ pipeline {
         string(name: 'TF_AMI', defaultValue: 'ami-07da0cabaf2e3aef6', description: 'Select your custom AMI-- not yet implemented')
         choice(name: 'AWS_PROFILE', choices: ['default', 'ec2-developer', 'ec2-developer'], description: 'Pick AWS profile')
         //string(name: 'version', defaultValue: '0.13.3', description: 'Version variable to pass to Terraform')
-        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically provision?')
-        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically deploy application?')
+        booleanParam(name: 'autoApprove1', defaultValue: false, description: 'Automatically provision?')
+        booleanParam(name: 'autoApprove2', defaultValue: false, description: 'Automatically deploy application?')
         }
 
      
@@ -87,7 +87,7 @@ pipeline {
                   sh "terraform workspace new ${params.TF_WORKSPACE} || true"
                   //sh "terraform workspace select ${params.TF_WORKSPACE}"
                   sh "terraform plan -input=false -out tfplan --var-file=./env_vars/${params.TF_WORKSPACE}.tfvars"
-                  sh 'terraform show -no-color tfplan > ../tfplan.txt'
+                  sh 'terraform show -no-color tfplan > tfplan.txt'
                 }
             }
         }
@@ -95,15 +95,15 @@ pipeline {
         stage('Approval') {
             when {
                 not {
-                    equals expected: true, actual: params.autoApprove
+                    equals expected: true, actual: params.autoApprove1
                 }
             }
 
             steps {
                 script {
-                    //dir("${params.TF_WORKSPACE}"){
+                    dir("${params.TF_WORKSPACE}"){
                     def plan = readFile 'tfplan.txt'
-                    //}
+                    }
                     input message: "Do you want to apply the plan?",
                         parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
                 }
