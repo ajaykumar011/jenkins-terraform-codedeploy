@@ -122,15 +122,11 @@ pipeline {
 
   
         stage('App Deployment') {
-            input {
-                message "Should you want to Deploy Application ?"
-                ok "Yes, we should."
-                submitter "Ajay, Kumar"
-                parameters {
-                    string(name: 'PERSON', defaultValue: 'Ajay Kumar', description: 'Who should I say hello to?')
-                    choice(name: 'APP-DEPLOYMENT', choices: ['Yes', 'No', 'nochange'], description: 'Pick yes to deploy app')
+            when {
+                not {
+                    equals expected: true, actual: params.autoApprove1
                 }
-             }
+            }
             steps {
                 script {
                 echo "Hello, ${PERSON}, We are going to deploy your app."
@@ -142,10 +138,7 @@ pipeline {
                 //dir("app"){
                 //sh "aws --region ${params.AWS_REGION} --profile ${params.AWS_PROFILE} deploy push --application-name ${application_name} --s3-location s3://${bucket_name}/${s3_zip_name}.zip"
               // }
-            }
-            when { 
-                environment name: 'APP-DEPLOYMENT', value: 'Yes'
-            }
+              }
             }
         }
         stage('Infra-Destroy') {
