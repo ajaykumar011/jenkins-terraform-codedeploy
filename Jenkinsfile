@@ -36,7 +36,7 @@ pipeline {
                     echo 'Pulling... ' + env.GIT_BRANCH
                     sh 'printenv'
                    //sh "ls -la ${pwd()}"   # this is working but not needed
-                   //sh "tree ${env.WORKSPACE}"  # this is working but not needed
+                   sh "tree ${env.WORKSPACE}"  # this is working but not needed
                 }
             }
         }
@@ -128,10 +128,14 @@ pipeline {
             steps {
                 script {
                 echo "HEY: We are going to deploy your app."
+                sh 'chmod +x app-deploy.sh'
+                sh './app-deploy.sh'
                 //def output = sh returnStdout: true, script: 'ls -l'
                 //FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
-                def APPLICATION_NAME = sh returnStdout: true, script: "terraform output | grep 'application_name' | cut -d '=' -f2 | xargs".trim()
-                echo "${APPLICATION_NAME}"
+                // APPLICATION_NAME = "${sh(script:'terraform output | grep 'application_name' | cut -d '=' -f2 | xargs', returnStdout: true)}" # working
+                //def APPLICATION_NAME = "${sh (returnStdout: true, script: "terraform output | grep 'application_name' | cut -d '=' -f2 | xargs".trim()) # try 2
+                //def APPLICATION_NAME = sh (returnStdout: true, script: "terraform output | grep 'application_name' | cut -d '=' -f2 | xargs".trim()) #try 1
+                //echo "${APPLICATION_NAME}"
                 //def bucket_name = sh (returnStdout: true, script: "(terraform output | grep 'bucket_name' | cut -d '=' -f2 | cut -d '.' -f1  | xargs).trim())"
                 //def s3_zip_name = sh (returnStdout: true, script: "(terraform output | grep 'application_name' | cut -d '=' -f2 | xargs_$BUILD_NUMBER.zip).trim())"
                 //dir("app"){
@@ -143,7 +147,7 @@ pipeline {
         stage('Infra-Destroy') {
             input {
                 message "Should we destroy the infrastructre ?"
-                ok "Yes, we should."
+                ok "Proceed."
                 submitter "alice,bob"
                 parameters {
                     string(name: 'PERSON', defaultValue: 'Ajay Kumar', description: 'Who should I say hello to?')
