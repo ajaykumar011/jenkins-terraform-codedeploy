@@ -85,7 +85,7 @@ pipeline {
                   //terraform init -input=false -force-copy -lock=true -upgrade -verify-plugins=true -backend=true -backend-config="profile=$AWS_PROFILE" -backend-config="region=$REGION" -backend-config="bucket=$S3_BUCKET" -backend-config="key=terraform-state/$ENV/terraform.tfstate" -backend-config="acl=private" 
                   //sh "terraform workspace select ${TF_WORKSPACE}""
                   sh "terraform workspace new ${params.TF_WORKSPACE} || true"
-                  sh "terraform workspace select ${params.TF_WORKSPACE}"
+                  //sh "terraform workspace select ${params.TF_WORKSPACE}"
                   sh "terraform plan -input=false -out tfplan --var-file=./env_vars/${params.TF_WORKSPACE}.tfvars"
                   sh 'terraform show -no-color tfplan > tfplan.txt'
                 }
