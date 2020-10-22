@@ -17,7 +17,10 @@ terraform apply dev.plan
 
 
 #instructions
+#------------------------------------------
 #pls note this example is not working .. Hence you need to make changes in deployment section and buidspec.yml.
 #be ready with Golden AMI (not general AMI and install)
-#adjust the userdata if the REady to use AMI is there
-#
+#adjust the userdata if the REady to use AMI is there. Current userdata is not tested
+#you may also need to findout to export the current AWS_Profile and AWS_REGION to export to shell script. Elese appdeploy.sh fails to execute.
+#Use export or any temporary file to store such things.
+#Only Deployment has problem rest everyting works great and tested.
